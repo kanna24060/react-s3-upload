@@ -16,7 +16,7 @@ import { LinearProgress } from "@material-ui/core";
        identityPoolId: us-east-1:17c82090-a71b-4f14-ab15-adcbbec4c010,
        region: us-east-1,
        userPoolId: us-east-1_UZoqEsmAG,
-       userPoolWebClientId: 6d48ta9aqo5nc5p8bi6lklf86, 
+       userPoolWebClientId: 6d48ta9aqo5nc5p8bi6lklf86 
    }});
 
 Storage.configure({ level: "private" });
