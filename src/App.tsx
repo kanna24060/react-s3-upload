@@ -3,12 +3,22 @@ import "./App.css";
 import logo from "./tensult-text-logo-latest.svg";
 
 import Amplify, { Storage } from "aws-amplify";
-import awsconfig from "./aws-exports";
+//import awsconfig from "./aws-exports";
 import { withAuthenticator, S3Text } from "aws-amplify-react";
 import Button from "@material-ui/core/Button";
 import { LinearProgress } from "@material-ui/core";
 
-Amplify.configure(awsconfig);
+// Amplify.configure(awsconfig);
+ import { Amplify } from 'aws-amplify';
+
+   Amplify.configure({
+   Auth: { 
+       identityPoolId: us-east-1:17c82090-a71b-4f14-ab15-adcbbec4c010,
+       region: us-east-1,
+       userPoolId: us-east-1_UZoqEsmAG,
+       userPoolWebClientId: 6d48ta9aqo5nc5p8bi6lklf86 
+   }});
+
 Storage.configure({ level: "private" });
 
 class App extends React.Component {
