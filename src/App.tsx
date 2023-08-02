@@ -1,73 +1,59 @@
-import React, { RefObject } from "react";
-import "./App.css";
-import logo from "./tensult-text-logo-latest.svg";
+import React, { useState } from 'react';
+import './App.css';
 
-import  { Storage } from "aws-amplify";
-//import awsconfig from "./aws-exports";
-import { withAuthenticator, S3Text } from "aws-amplify-react";
-import Button from "@material-ui/core/Button";
-import { LinearProgress } from "@material-ui/core";
+// Import Amplify and Storage
+import Amplify, { Storage } from 'aws-amplify';
+// withAuthenticator is a higher order component that wraps the application with a login page
+import { withAuthenticator } from '@aws-amplify/ui-react';
+// Import the project config files and configure them with Amplify
+import awsconfig from './aws-exports';
+Amplify.configure(awsconfig);
 
-// Amplify.configure(awsconfig);
- import Amplify  from 'aws-amplify';
+const App = () => {
+  const [imageUrl, setImageUrl] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-   Amplify.configure({
-   Auth: { 
-       identityPoolId: us-east-1:17c82090-a71b-4f14-ab15-adcbbec4c010,
-       region: us-east-1,
-       userPoolId: us-east-1_UZoqEsmAG,
-       userPoolWebClientId: 6d48ta9aqo5nc5p8bi6lklf86 
-   }});
-
-Storage.configure({ level: "private" });
-
-class App extends React.Component {
-  fileInput: RefObject<any>;
-  constructor(props: any) {
-    super(props);
-    this.fileInput = React.createRef();
+  const downloadUrl = async () => {
+    // Creates download url that expires in 5 minutes/ 300 seconds
+    const downloadUrl = await Storage.get('picture.jpg', { expires: 300 });
+    window.location.href = downloadUrl
   }
-  progressCallback = (progress: any) => {
-    this.setState({ fileProgress: 100 * (progress.loaded / progress.total) });
-  };
-  uploadFile = () => {
-    const file = this.fileInput.current.files[0];
-    const name = file.name;
 
-    Storage.put(name, file, { progressCallback: this.progressCallback }).then(
-      () => {
-        this.setState({ file: name });
-      }
-    );
-  };
+  const handleChange = async (e) => {
+    const file = e.target.files[0];
+    try {
+      setLoading(true);
+      // Upload the file to s3 with private access level. 
+      await Storage.put('picture.jpg', file, {
+        level: 'private',
+        contentType: 'image/jpg'
+      });
+      // Retrieve the uploaded file to display
+      const url = await Storage.get('picture.jpg', { level: 'private' })
+      setImageUrl(url);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
-  render() {
-    const fileProgress = this.state ? (this.state as any).fileProgress : 0;
-    return (
-      <div className="App">
-        <header className="App-header">
-          <div className="App">
-            
-          <img src={logo} className="App-logo" alt="Tensult" />
-            <p> Pick a file</p>
-            <input type="file" ref={this.fileInput} />
-            <S3Text level="private" path="" />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={this.uploadFile}
-            >
-              Upload
-            </Button>
-            <br /> <br />
-            {fileProgress > 0 && 
-              <LinearProgress variant="determinate" value={fileProgress} />
-            }
-          </div>
-        </header>
+  return (
+    <div className="App">
+      <h1> Upload an Image </h1>
+      {loading ? <h3>Uploading...</h3> : <input
+        type="file" accept='image/jpg'
+        onChange={(evt) => handleChange(evt)}
+      />}
+      <div>
+        {imageUrl ? <img style={{ width: "30rem" }} src={imageUrl} /> : <span />}
       </div>
-    );
-  }
+      <div>
+        <h2>Download URL?</h2>
+        <button onClick={() => downloadUrl()}>Click Here!</button>
+      </div>
+    </div>
+  );
 }
 
-export default withAuthenticator(App, true);
+// withAuthenticator wraps your App with a Login component
+export default withAuthenticator(App);
