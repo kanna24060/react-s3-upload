@@ -14,7 +14,7 @@ awsConfig = {
      },
   //   // Other service configurations
   //   // ...
-   };
+   },
   // You can copy it to amplifyConfig in export.js as follows:
   // ... copy the configuration object here ...
 
