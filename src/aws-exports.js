@@ -1,8 +1,8 @@
 // export.js
-const amplifyConfig = {
+ amplifyConfig = {
   // Add the configuration object from aws-exports.js here
   // For example, if your aws-exports.js looks like this:
-  const awsConfig = {
+awsConfig = {
     Auth: {
        region: 'us-east-1',
        userPoolId: 'us-east-1:17c82090-a71b-4f14-ab15-adcbbec4c010',
