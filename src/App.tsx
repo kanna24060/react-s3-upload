@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 import { LinearProgress } from "@material-ui/core";
 
 // Amplify.configure(awsconfig);
- import { Amplify } from 'aws-amplify';
+ import Amplify  from 'aws-amplify';
 
    Amplify.configure({
    Auth: { 
