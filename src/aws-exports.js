@@ -11,7 +11,7 @@ awsConfig = {
      Storage: {
        bucket: 'lmpq5s3amplifytest143129-test',
        region: 'us-east-1',
-     }
+     },
   //   // Other service configurations
   //   // ...
   // };
