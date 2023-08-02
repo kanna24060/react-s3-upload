@@ -2,7 +2,7 @@ import React, { RefObject } from "react";
 import "./App.css";
 import logo from "./tensult-text-logo-latest.svg";
 
-import Amplify, { Storage } from "aws-amplify";
+import  { Storage } from "aws-amplify";
 //import awsconfig from "./aws-exports";
 import { withAuthenticator, S3Text } from "aws-amplify-react";
 import Button from "@material-ui/core/Button";
